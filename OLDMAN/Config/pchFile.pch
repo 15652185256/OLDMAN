@@ -1,0 +1,42 @@
+//
+//  pchFile.pch
+//  OLDMAN
+//
+//  Created by 赵晓东 on 16/1/26.
+//  Copyright © 2016年 ZXD. All rights reserved.
+//
+
+#ifndef pchFile_pch
+#define pchFile_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+//自定义接口 参数
+#import "Config.h"
+
+//数据请求
+#import"AFNetworking.h"
+#import "NetRequestClass.h"
+//
+//界面刷新特效
+#import "KVNProgress.h"
+
+//图片缓存
+#import "UIButton+WebCache.h"
+#import "UIImageView+WebCache.h"
+
+//自定义工具类
+#import "ZCControl.h"//创建UI
+#import "PublicFunction.h"//公共方法
+
+
+
+#endif
+
+#endif /* pchFile_pch */
