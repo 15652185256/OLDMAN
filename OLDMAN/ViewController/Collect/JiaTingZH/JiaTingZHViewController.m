@@ -301,6 +301,15 @@
                 if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuSheQu]) {
                     [self getAreaByCurrentCode:_jiaTingZHModel.juZhuSheQu type:34];
                 }
+                
+                //设置页面
+                [self createView];
+                
+            } else {
+                
+                UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"监护人到家庭主要照护者" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                alertView.tag = 800000;
+                [alertView show];
             }
             
         } else {
@@ -309,8 +318,7 @@
             [alertView show];
         }
         
-        //设置页面
-        [self createView];
+        
         
     } WithErrorBlock:^(id errorCode) {
         [KVNProgress dismiss];
@@ -319,6 +327,89 @@
     }];
 }
 
+
+//将 监护人到紧急联系人
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==800000) {
+        
+        if (buttonIndex==1) {
+            CollectViewModel * _collectViewModel=[[CollectViewModel alloc]init];
+            
+            [_collectViewModel SelectAssessmentResult:self.shenFenZJ tableFlag:@"3"];
+            
+            [KVNProgress show];
+            
+            [_collectViewModel setBlockWithReturnBlock:^(id returnValue) {
+                
+                //NSLog(@"%@",returnValue);
+                
+                [KVNProgress dismiss];
+                
+                if ([returnValue[@"success"] intValue]==1) {
+                    
+                    if ([returnValue[@"data"] isKindOfClass:[NSDictionary class]]) {
+                        
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"jianHuRX"] forKey:@"xingMing"];
+                        
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuSheng"] forKey:@"juZhuSheng"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuShi"] forKey:@"juZhuShi"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuQu"] forKey:@"juZhuQu"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuJie"] forKey:@"juZhuJie"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuSheQu"] forKey:@"juZhuSheQu"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"juZhuAddress"] forKey:@"juZhuAddress"];
+                        
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"zhuZhaiDH"] forKey:@"zhuZhaiDH"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"yiDongDH"] forKey:@"yiDongDH"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"youZhengBM"] forKey:@"youZhengBM"];
+                        [_jiaTingZHModel setValue:[returnValue[@"data"] objectForKey:@"dianZiYX"] forKey:@"dianZiYX"];
+                        
+                        
+                        
+                        //获取 居住 省
+                        if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuSheng]) {
+                            [self getAreaByCurrentCode:_jiaTingZHModel.juZhuSheng type:30];
+                        }
+                        //获取 居住 市
+                        if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuShi]) {
+                            [self getAreaByCurrentCode:_jiaTingZHModel.juZhuShi type:31];
+                        }
+                        //获取 居住 区
+                        if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuQu]) {
+                            [self getAreaByCurrentCode:_jiaTingZHModel.juZhuQu type:32];
+                        }
+                        //获取 居住 街道
+                        if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuJie]) {
+                            [self getAreaByCurrentCode:_jiaTingZHModel.juZhuJie type:33];
+                        }
+                        //获取 居住 社区
+                        if (![PublicFunction isBlankString:_jiaTingZHModel.juZhuSheQu]) {
+                            [self getAreaByCurrentCode:_jiaTingZHModel.juZhuSheQu type:34];
+                        }
+                    }
+                    
+                } else {
+                    
+                    UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"错误代码%@",returnValue[@"code"]] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                    [alertView show];
+                }
+                
+                //设置页面
+                [self createView];
+                
+            } WithErrorBlock:^(id errorCode) {
+                [KVNProgress dismiss];
+            } WithFailureBlock:^{
+                [KVNProgress dismiss];
+            }];
+            
+        } else {
+            
+            //设置页面
+            [self createView];
+        }
+    }
+}
 
 
 

@@ -285,7 +285,7 @@
             
             [_collectViewModel setBlockWithReturnBlock:^(id returnValue) {
                 
-                NSLog(@"%@",returnValue);
+                //NSLog(@"%@",returnValue);
                 
                 [KVNProgress dismiss];
                 
