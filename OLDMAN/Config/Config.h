@@ -158,10 +158,10 @@ typedef void (^NetWorkBlock)(BOOL netConnetState);
 
 
 //测试 域名 路径
-#define Http @"http://test.oldman.yykhc.com:8080/assessment/assessmentController/"
+//#define Http @"http://test.oldman.yykhc.com:8080/assessment/assessmentController/"
 
 //域名 路径
-//#define Http @"http://oldman.yykhc.com:8080/assessment/assessmentController/"
+#define Http @"http://oldman.yykhc.com:8080/assessment/assessmentController/"
 
 //#define Http @"http://182.92.172.181:8080/assessment/assessmentController/"
 
