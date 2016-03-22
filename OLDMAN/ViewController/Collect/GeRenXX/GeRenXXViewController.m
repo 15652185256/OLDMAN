@@ -2271,12 +2271,14 @@
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请选择“籍贯(省)”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
         
-    }else if ([PublicFunction isBlankString:my_jiGuanShi_Label.text]) {
-#pragma mark - 籍贯市
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请选择“籍贯(市)”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alertView show];
-        
-    }else if ([PublicFunction isBlankString:my_shiYongYY]) {
+    }
+//    else if ([PublicFunction isBlankString:my_jiGuanShi_Label.text]) {
+//#pragma mark - 籍贯市
+//        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请选择“籍贯(市)”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//        [alertView show];
+//        
+//    }
+    else if ([PublicFunction isBlankString:my_shiYongYY]) {
 #pragma mark - 使用语言
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请选择“使用语言”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
