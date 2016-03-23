@@ -307,7 +307,7 @@
                 
             } else {
                 
-                UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"监护人到家庭主要照护者" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"监护人信息同步到家庭主要照护者" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
                 alertView.tag = 800000;
                 [alertView show];
             }
