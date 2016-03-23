@@ -83,10 +83,8 @@
     _userCountModel=[[UserCountModel alloc]init];//数据源
     
     
-    //设置导航的标题
-    self.title = @"北京市老年人评估及服务系统";
-    
-    
+    //设置导航
+    [self createNav];
     
     //设置头部
     [self createTopView];
@@ -114,9 +112,6 @@
 //刷新
 -(void)viewWillAppear:(BOOL)animated
 {
-    //设置导航
-    [self createNav];
-    
     if ([[FMDBManager shareManager] IsSelectNewsData].count!=0) {
         //设置信息按钮
         [_newsButton setImage:[UIImage imageNamed:@"nav_news@2x"] forState:UIControlStateNormal];
@@ -207,7 +202,7 @@
     
     //设置导航的标题
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:CREATECOLOR(255, 255, 255, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:Title_text_font]}];
-    
+    self.navigationItem.title = @"北京市老年人评估及服务系统";
     
     //设置信息按钮
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:_newsButton];
