@@ -8,15 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol WeiKaiShiRefreshDelegate <NSObject>
--(void)RefreshData;
-@end
-
 @interface WeiKaiShiViewController : UIViewController
-
-@property (nonatomic,assign) id<WeiKaiShiRefreshDelegate> delegate;
 
 //传值
 @property(nonatomic,copy)void(^myBlock)(NSString*);
+
+-(void)beginRefreshing;//刷新
 
 @end

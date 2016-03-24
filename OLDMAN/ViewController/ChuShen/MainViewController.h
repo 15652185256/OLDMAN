@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "DaiShenHeViewController.h"//待审核
-
-#import "YiShenHeViewController.h"//已审核
-
-@interface MainViewController : UIViewController<DaiShenHeRefreshDelegate,YiShenHeRefreshDelegate>
+@interface MainViewController : UIViewController
 
 @end

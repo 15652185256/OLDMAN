@@ -10,10 +10,16 @@
 
 #import "UserCountModel.h"
 
+#import "DaiShenHeViewController.h"//待审核
+
+#import "YiShenHeViewController.h"//已审核
+
 //登录页
 #import "LoginViewController.h"
 //功能列表
 #import "FunctionViewController.h"
+
+
 
 
 #import "FMDBManager.h"
@@ -36,11 +42,13 @@
     //设置信息按钮
     UIButton * _newsButton;
     
-    UILabel * Dai_label;
+    UILabel * Dai_label;//待审核
     
-    UILabel * Yi_label;
+    UILabel * Yi_label;//已审核
     
     UserCountModel * _userCountModel;//数据源
+    
+    NSInteger index;//页码
 }
 //头标题数组
 @property(nonatomic,retain)NSArray * titleArray;
@@ -68,15 +76,16 @@
     _LoginVC=[[LoginViewController alloc]init];//登录页
     
     _JpushNewsVC=[[JpushNewsListViewController alloc]init];//推送信息
+    
+    _userCountModel=[[UserCountModel alloc]init];//数据源
+    
+    index=0;
 
-    //设置导航的标题
-    self.title = @"北京市老年人评估及服务系统";
+    //设置导航
+    [self createNav];
     
     //设置头部
     [self createTopView];
-    
-    //加载头部
-    [self.view addSubview:navigationView];
 
     //设置页面
     [self createView];
@@ -95,8 +104,8 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    //设置导航
-    [self createNav];
+    //刷新页面
+    [self RefreshView];
     
     if ([[FMDBManager shareManager] IsSelectNewsData].count!=0) {
         //设置信息按钮
@@ -119,9 +128,9 @@
     }
 }
 
-//请求数据
+//请求 头部人数 数据
 -(void)RefreshData
-{    
+{
     NSUserDefaults * user=[NSUserDefaults standardUserDefaults];
     
     NSDictionary * parameter = @{@"doc_id":[user objectForKey:doc_id]};
@@ -176,6 +185,7 @@
     
     //设置导航的标题
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:CREATECOLOR(255, 255, 255, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:Title_text_font]}];
+    self.navigationItem.title = @"北京市老年人评估及服务系统";
     
     
     //设置信息按钮
@@ -195,8 +205,9 @@
     
     
     navigationView=[ZCControl createView:CGRectMake(0, 0, WIDTH, nav_height)];
-
     navigationView.backgroundColor=View_Background_Color;
+    [self.view addSubview:navigationView];
+    
     
     self.titleArray=@[@"待审核",@"已完成"];
     
@@ -221,7 +232,7 @@
     UITapGestureRecognizer * tap_Dai = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap_switch_GestureAction:)];
     [Dai_imageView addGestureRecognizer:tap_Dai];
     
-    Dai_label=[ZCControl createLabelWithFrame:CGRectMake(WIDTH/4+24, 28, WIDTH/4, nav_height-28) Font:11 Text:nil];
+    Dai_label=[ZCControl createLabelWithFrame:CGRectMake(WIDTH/4+24, 28, WIDTH/4, nav_height-28) Font:11 Text:@"222"];
     Dai_label.textColor=[UIColor redColor];
     [Dai_Button addSubview:Dai_label];
     
@@ -281,20 +292,10 @@
     
     //更改页码
     _rootScrollView.contentOffset=CGPointMake(WIDTH*(button.tag-3000), 0);
+    index=button.tag-3000;
     
-    
-    [_dvc.view removeFromSuperview];
-    [_yvc.view removeFromSuperview];
-    switch (button.tag-3000) {
-        case 0:
-            [_rootScrollView addSubview:_dvc.view];
-            break;
-        case 1:
-            [_rootScrollView addSubview:_yvc.view];
-            break;
-        default:
-            break;
-    }
+    //刷新页面
+    [self RefreshView];
 }
 
 
@@ -317,20 +318,10 @@
     
     //更改页码
     _rootScrollView.contentOffset=CGPointMake(WIDTH*(button.tag-3000), 0);
+    index=button.tag-3000;
     
-    
-    [_dvc.view removeFromSuperview];
-    [_yvc.view removeFromSuperview];
-    switch (button.tag-3000) {
-        case 0:
-            [_rootScrollView addSubview:_dvc.view];
-            break;
-        case 1:
-            [_rootScrollView addSubview:_yvc.view];
-            break;
-        default:
-            break;
-    }
+    //刷新页面
+    [self RefreshView];
 }
 
 
@@ -347,7 +338,6 @@
     __weak typeof(self) weakSelf = self;
     
     _dvc=[[DaiShenHeViewController alloc]init];
-    _dvc.delegate=self;
     _dvc.view.frame=CGRectMake(0, 0, WIDTH, HEIGHT-64-44-Tabbar_HE);
     [_rootScrollView addSubview:_dvc.view];
     _dvc.myBlock=^(NSString * shenFenZJ){
@@ -356,7 +346,6 @@
     };
     
     _yvc=[[YiShenHeViewController alloc]init];
-    _yvc.delegate=self;
     _yvc.view.frame=CGRectMake(WIDTH, 0, WIDTH, HEIGHT-64-44-Tabbar_HE);
     _yvc.myBlock=^(NSString * shenFenZJ){
         fvc.shenFenZJ=shenFenZJ;
@@ -430,7 +419,7 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     //更改页码
-    int index=scrollView.contentOffset.x/WIDTH;
+    index=scrollView.contentOffset.x/WIDTH;
     
     for (int j=0; j<self.titleArray.count; j++) {
         UIButton * allbutton=(UIButton*)[navigationView viewWithTag:3000+j];
@@ -447,14 +436,28 @@
     hengView.center = center;
     [UIView commitAnimations];
     
+    
+    //刷新页面
+    [self RefreshView];
+    
+}
+
+//刷新页面
+-(void)RefreshView
+{
+    //请求 头部人数 数据
+    [self RefreshData];
+    
     [_dvc.view removeFromSuperview];
     [_yvc.view removeFromSuperview];
     switch (index) {
         case 0:
             [_rootScrollView addSubview:_dvc.view];
+            [_dvc beginRefreshing];
             break;
         case 1:
             [_rootScrollView addSubview:_yvc.view];
+            [_yvc beginRefreshing];
             break;
         default:
             break;

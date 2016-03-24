@@ -8,15 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol YiWanChengRefreshDelegate <NSObject>
--(void)RefreshData;
-@end
-
 @interface YiWanChengViewController : UIViewController
-
-@property (nonatomic,assign) id<YiWanChengRefreshDelegate> delegate;
 
 //传值
 @property(nonatomic,copy)void(^myBlock)(NSString*);
+
+-(void)beginRefreshing;//刷新
 
 @end

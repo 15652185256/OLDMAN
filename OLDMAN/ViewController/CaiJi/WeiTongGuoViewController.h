@@ -8,15 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol WeiTongGuoRefreshDelegate <NSObject>
--(void)RefreshData;
-@end
-
 @interface WeiTongGuoViewController : UIViewController
-
-@property (nonatomic,assign) id<WeiTongGuoRefreshDelegate> delegate;
 
 //传值
 @property(nonatomic,copy)void(^myBlock)(NSString*);
+
+-(void)beginRefreshing;//刷新
 
 @end

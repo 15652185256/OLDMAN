@@ -19,7 +19,16 @@
 #import "JpushNewsListViewController.h"//推送信息
 
 
-#import "FMDBManager.h"
+#import "WeiKaiShiViewController.h"//未开始
+
+#import "JinXingZhongViewController.h"//进行中
+
+#import "WeiTongGuoViewController.h"//未通过
+
+#import "YiWanChengViewController.h"//已完成
+
+
+#import "FMDBManager.h"//数据库
 
 #import "JPUSHService.h"//极光推送
 
@@ -49,6 +58,8 @@
     UIScrollView * _rootScrollView;//主视图
     
     UserCountModel * _userCountModel;//数据源
+    
+    NSInteger index;//页码
 }
 
 //头标题数组
@@ -82,15 +93,14 @@
     
     _userCountModel=[[UserCountModel alloc]init];//数据源
     
+    index=0;
+    
     
     //设置导航
     [self createNav];
     
     //设置头部
     [self createTopView];
-    
-    //加载头部
-    [self.view addSubview:navigationView];
     
     //设置页面
     [self createView];
@@ -112,6 +122,9 @@
 //刷新
 -(void)viewWillAppear:(BOOL)animated
 {
+    //刷新页面
+    [self RefreshView];
+    
     if ([[FMDBManager shareManager] IsSelectNewsData].count!=0) {
         //设置信息按钮
         [_newsButton setImage:[UIImage imageNamed:@"nav_news@2x"] forState:UIControlStateNormal];
@@ -134,7 +147,7 @@
 }
 
 
-//请求数据
+//请求 头部人数 数据
 -(void)RefreshData
 {
     NSUserDefaults * user=[NSUserDefaults standardUserDefaults];
@@ -220,6 +233,7 @@
     
     navigationView=[ZCControl createView:CGRectMake(0, 0, WIDTH, nav_height)];
     navigationView.backgroundColor=View_Background_Color;
+    [self.view addSubview:navigationView];
     
     hengView=[[UIView alloc] initWithFrame:CGRectMake(0, nav_height-3, WIDTH/4, 3)];
     hengView.backgroundColor=CREATECOLOR(86, 174, 215, 1);
@@ -344,28 +358,10 @@
     
     //更改页码
     _rootScrollView.contentOffset=CGPointMake(WIDTH*(button.tag-3000), 0);
+    index=button.tag-3000;
     
-    
-    [_kvc.view removeFromSuperview];
-    [_jvc.view removeFromSuperview];
-    [_tvc.view removeFromSuperview];
-    [_wvc.view removeFromSuperview];
-    switch (button.tag-3000) {
-        case 0:
-            [_rootScrollView addSubview:_kvc.view];
-            break;
-        case 1:
-            [_rootScrollView addSubview:_jvc.view];
-            break;
-        case 2:
-            [_rootScrollView addSubview:_tvc.view];
-            break;
-        case 3:
-            [_rootScrollView addSubview:_wvc.view];
-            break;
-        default:
-            break;
-    }
+    //刷新页面
+    [self RefreshView];
 }
 
 
@@ -385,30 +381,13 @@
     hengView.center = center;
     [UIView commitAnimations];
     
+    
     //更改页码
     _rootScrollView.contentOffset=CGPointMake(WIDTH*(button.tag-3000), 0);
-    
-    
-    [_kvc.view removeFromSuperview];
-    [_jvc.view removeFromSuperview];
-    [_tvc.view removeFromSuperview];
-    [_wvc.view removeFromSuperview];
-    switch (button.tag-3000) {
-        case 0:
-            [_rootScrollView addSubview:_kvc.view];
-            break;
-        case 1:
-            [_rootScrollView addSubview:_jvc.view];
-            break;
-        case 2:
-            [_rootScrollView addSubview:_tvc.view];
-            break;
-        case 3:
-            [_rootScrollView addSubview:_wvc.view];
-            break;
-        default:
-            break;
-    }
+    index=button.tag-3000;
+
+    //刷新页面
+    [self RefreshView];
 }
 
 
@@ -421,14 +400,11 @@
     _rootScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, nav_height, WIDTH, HEIGHT-64-Tabbar_HE-nav_height)];
     [self.view addSubview:_rootScrollView];
     
-    
     FunctionViewController * fvc=[[FunctionViewController alloc]init];//功能列表
-    
     
     __weak typeof(self) weakSelf = self;
     
     _kvc=[[WeiKaiShiViewController alloc]init];
-    _kvc.delegate=self;
     _kvc.view.frame=CGRectMake(0, 0, WIDTH, _rootScrollView.frame.size.height);
     [_rootScrollView addSubview:_kvc.view];
     _kvc.myBlock=^(NSString * shenFenZJ){
@@ -437,7 +413,6 @@
     };
     
     _jvc=[[JinXingZhongViewController alloc]init];
-    _jvc.delegate=self;
     _jvc.view.frame=CGRectMake(WIDTH, 0, WIDTH, _rootScrollView.frame.size.height);
     _jvc.myBlock=^(NSString * shenFenZJ){
         fvc.shenFenZJ=shenFenZJ;
@@ -445,7 +420,6 @@
     };
     
     _tvc=[[WeiTongGuoViewController alloc]init];
-    _tvc.delegate=self;
     _tvc.view.frame=CGRectMake(WIDTH*2, 0, WIDTH, _rootScrollView.frame.size.height);
     _tvc.myBlock=^(NSString * shenFenZJ){
         fvc.shenFenZJ=shenFenZJ;
@@ -453,7 +427,6 @@
     };
     
     _wvc=[[YiWanChengViewController alloc]init];
-    _wvc.delegate=self;
     _wvc.view.frame=CGRectMake(WIDTH*3, 0, WIDTH, _rootScrollView.frame.size.height);
     _wvc.myBlock=^(NSString * shenFenZJ){
         fvc.shenFenZJ=shenFenZJ;
@@ -529,7 +502,7 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     //更改页码
-    int index=scrollView.contentOffset.x/WIDTH;
+    index=scrollView.contentOffset.x/WIDTH;
     
     for (int j=0; j<self.titleArray.count; j++) {
         UIButton * allbutton=(UIButton*)[navigationView viewWithTag:3000+j];
@@ -547,6 +520,17 @@
     [UIView commitAnimations];
     
     
+    //刷新页面
+    [self RefreshView];
+}
+
+
+//刷新页面
+-(void)RefreshView
+{
+    //请求 头部人数 数据
+    [self RefreshData];
+    
     [_kvc.view removeFromSuperview];
     [_jvc.view removeFromSuperview];
     [_tvc.view removeFromSuperview];
@@ -554,15 +538,19 @@
     switch (index) {
         case 0:
             [_rootScrollView addSubview:_kvc.view];
+            [_kvc beginRefreshing];
             break;
         case 1:
             [_rootScrollView addSubview:_jvc.view];
+            [_jvc beginRefreshing];
             break;
         case 2:
             [_rootScrollView addSubview:_tvc.view];
+            [_tvc beginRefreshing];
             break;
         case 3:
             [_rootScrollView addSubview:_wvc.view];
+            [_wvc beginRefreshing];
             break;
         default:
             break;

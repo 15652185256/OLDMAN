@@ -64,29 +64,20 @@
     [_tableView addLegendFooterWithRefreshingBlock:^{
         [weakSelf loadData:_NewsListPage];
     }];
-    
-    _NewsListPage=1;
-    //加载数据
-    [_tableView.header beginRefreshing];
 }
 
-//加载数据
--(void)viewWillAppear:(BOOL)animated
+//下拉刷新
+-(void)beginRefreshing
 {
     _NewsListPage=1;
     //加载数据
     [_tableView.header beginRefreshing];
 }
+
 
 #pragma mark 加载数据
 -(void)loadData:(int)page
 {
-    
-    if ([self.delegate respondsToSelector:@selector(RefreshData)]) {
-        //调用委托对象的协议方法
-        [self.delegate RefreshData];
-    }
-    
     //请求数据
     RootViewModel * _rootViewModel=[[RootViewModel alloc]init];
     

@@ -8,15 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol JinXingZhongRefreshDelegate <NSObject>
--(void)RefreshData;
-@end
-
 @interface JinXingZhongViewController : UIViewController
-
-@property (nonatomic,assign) id<JinXingZhongRefreshDelegate> delegate;
 
 //传值
 @property(nonatomic,copy)void(^myBlock)(NSString*);
+
+-(void)beginRefreshing;//刷新
 
 @end
