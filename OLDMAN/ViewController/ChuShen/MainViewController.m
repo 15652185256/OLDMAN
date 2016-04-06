@@ -189,6 +189,7 @@
     
     
     //设置信息按钮
+    _newsButton=[ZCControl createButtonWithFrame:CGRectMake(0, 0, 22, 18) Text:nil ImageName:nil bgImageName:nil Target:self Method:@selector(newsButtonClick)];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:_newsButton];
     
     
@@ -197,9 +198,6 @@
 #pragma mark 设置头部
 -(void)createTopView
 {
-    //设置信息按钮
-    _newsButton=[ZCControl createButtonWithFrame:CGRectMake(0, 0, 22, 18) Text:nil ImageName:nil bgImageName:nil Target:self Method:@selector(newsButtonClick)];
-    
     //头部视图 高度
     nav_height=65;
     
