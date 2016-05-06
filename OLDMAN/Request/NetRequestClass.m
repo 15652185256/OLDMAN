@@ -15,35 +15,35 @@
 
 @implementation NetRequestClass
 #pragma 监测网络的可链接性
-+ (BOOL) netWorkReachabilityWithURLString:(NSString *) strUrl
-{
-    __block BOOL netState = NO;
-    
-    NSURL *baseURL = [NSURL URLWithString:strUrl];
-    
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
-    
-    NSOperationQueue *operationQueue = manager.operationQueue;
-    
-    [manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        switch (status) {
-            case AFNetworkReachabilityStatusReachableViaWWAN:
-            case AFNetworkReachabilityStatusReachableViaWiFi:
-                [operationQueue setSuspended:NO];
-                netState = YES;
-                break;
-            case AFNetworkReachabilityStatusNotReachable:
-                netState = NO;
-            default:
-                [operationQueue setSuspended:YES];
-                break;
-        }
-    }];
-    
-    [manager.reachabilityManager startMonitoring];
-    
-    return netState;
-}
+//+ (BOOL) netWorkReachabilityWithURLString:(NSString *) strUrl
+//{
+//    __block BOOL netState = NO;
+//    
+//    NSURL *baseURL = [NSURL URLWithString:strUrl];
+//    
+//    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+//    
+//    NSOperationQueue *operationQueue = manager.operationQueue;
+//    
+//    [manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        switch (status) {
+//            case AFNetworkReachabilityStatusReachableViaWWAN:
+//            case AFNetworkReachabilityStatusReachableViaWiFi:
+//                [operationQueue setSuspended:NO];
+//                netState = YES;
+//                break;
+//            case AFNetworkReachabilityStatusNotReachable:
+//                netState = NO;
+//            default:
+//                [operationQueue setSuspended:YES];
+//                break;
+//        }
+//    }];
+//    
+//    [manager.reachabilityManager startMonitoring];
+//    
+//    return netState;
+//}
 
 
 /***************************************
@@ -157,29 +157,60 @@
 
 
 #pragma --mark POST 注册/登录
+//+ (void) NetRequestLoginRegWithRequestURL: (NSString *) requestURLString WithParameter: (NSDictionary *) parameter WithReturnValeuBlock: (ReturnValueBlock) block WithErrorCodeBlock: (ErrorCodeBlock) errorBlock WithFailureBlock: (FailureBlock) failureBlock
+//{
+//    AFHTTPRequestOperationManager * manager = [[AFHTTPRequestOperationManager alloc] init];
+//    
+//    //设置超时时间
+//    [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+//    manager.requestSerializer.timeoutInterval=10.0f;
+//    [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
+//
+//    AFHTTPRequestOperation * op = [manager POST:requestURLString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        
+//        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+//        
+//        block(dic);
+//        
+//    } failure:^(AFHTTPRequestOperation * operation, NSError *error) {
+//        failureBlock();
+//    }];
+//    
+//    op.responseSerializer = [AFHTTPResponseSerializer serializer];
+//    
+//    [op start];
+//    
+//}
+
 + (void) NetRequestLoginRegWithRequestURL: (NSString *) requestURLString WithParameter: (NSDictionary *) parameter WithReturnValeuBlock: (ReturnValueBlock) block WithErrorCodeBlock: (ErrorCodeBlock) errorBlock WithFailureBlock: (FailureBlock) failureBlock
 {
-    AFHTTPRequestOperationManager * manager = [[AFHTTPRequestOperationManager alloc] init];
     
-    //设置超时时间
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    
+    //请求格式
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    
+    //返回格式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    // 设置超时时间
     [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
-    manager.requestSerializer.timeoutInterval=10.0f;
+    manager.requestSerializer.timeoutInterval = 10.0f;
     [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
-
-    AFHTTPRequestOperation * op = [manager POST:requestURLString parameters:parameter success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    
+    [manager POST:requestURLString parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         
         block(dic);
         
-    } failure:^(AFHTTPRequestOperation * operation, NSError *error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        NSLog(@"%@",error);
+        
         failureBlock();
     }];
-    
-    op.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    [op start];
-    
 }
 
 
