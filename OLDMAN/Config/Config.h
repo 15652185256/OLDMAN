@@ -125,7 +125,6 @@ typedef void (^NetWorkBlock)(BOOL netConnetState);
 
 
 //登录
-#define IsLoginVC @"isLoginVC"       //是否 是通过登录页 登录
 #define ISLOGIN @"isLogin"       //是否登录
 
 #define UserName @"userName"     //用户名

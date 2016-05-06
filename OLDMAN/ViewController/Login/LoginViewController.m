@@ -231,9 +231,6 @@
                                     [self presentViewController:_TopVC animated:YES completion:^{}];
                                 }
                                 
-                                //修改 是否 是通过登录页 登录
-                                [user setObject:@"0" forKey:IsLoginVC];
-                                
                                 [user synchronize];
                                 
                                 

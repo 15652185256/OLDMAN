@@ -121,25 +121,16 @@
     if ([[user objectForKey:ISLOGIN] intValue]==0) {
         LoginViewController * lvc=[[LoginViewController alloc]init];
         self.window.rootViewController=lvc;
-        
-        //修改 是否 是通过登录页 登录
-        [user setObject:@"0" forKey:IsLoginVC];
     }else{
         
         if ([[user objectForKey:idenity] intValue]==1) {
             RootViewController * rvc=[[RootViewController alloc]init];
             UINavigationController * nvc=[[UINavigationController alloc]initWithRootViewController:rvc];
             self.window.rootViewController=nvc;
-            
-            //修改 是否 是通过登录页 登录
-            [user setObject:@"1" forKey:IsLoginVC];
         } else {
             MainViewController * mvc=[[MainViewController alloc]init];
             UINavigationController * nvc=[[UINavigationController alloc]initWithRootViewController:mvc];
             self.window.rootViewController=nvc;
-            
-            //修改 是否 是通过登录页 登录
-            [user setObject:@"1" forKey:IsLoginVC];
         }
     }
     [user synchronize];
