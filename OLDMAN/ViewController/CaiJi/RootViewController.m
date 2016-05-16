@@ -16,6 +16,8 @@
 
 #import "FunctionViewController.h"//功能列表
 
+#import "SearchViewController.h"//搜索列表
+
 #import "JpushNewsListViewController.h"//推送信息
 
 
@@ -75,6 +77,8 @@
 
 @property(nonatomic,retain)YiWanChengViewController * wvc;//已完成
 
+@property(nonatomic,retain)SearchViewController * SearchVC;//搜索信息
+
 @property(nonatomic,retain)JpushNewsListViewController * JpushNewsVC;//推送信息
 
 @end
@@ -88,6 +92,8 @@
     self.view.backgroundColor=View_Background_Color;
     
     _LoginVC=[[LoginViewController alloc]init];//登录页
+    
+    _SearchVC=[[SearchViewController alloc]init];//搜索信息
     
     _JpushNewsVC=[[JpushNewsListViewController alloc]init];//推送信息
     
@@ -217,10 +223,28 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:CREATECOLOR(255, 255, 255, 1),NSFontAttributeName:[UIFont boldSystemFontOfSize:Title_text_font]}];
     self.navigationItem.title = @"北京市老年人评估及服务系统";
     
+    //设置搜索按钮
+    UIButton * searchButton=[ZCControl createButtonWithFrame:CGRectMake(0, 0, 22, 21) Text:nil ImageName:@"search_icon@2x" bgImageName:nil Target:self Method:@selector(searchButtonClick)];
+    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:searchButton];
+    
     //设置信息按钮
     _newsButton=[ZCControl createButtonWithFrame:CGRectMake(0, 0, 22, 18) Text:nil ImageName:nil bgImageName:nil Target:self Method:@selector(newsButtonClick)];
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:_newsButton];
 }
+
+//搜索按钮跳转
+-(void)searchButtonClick
+{
+    [self.navigationController pushViewController:_SearchVC animated:YES];
+}
+
+//信息按钮跳转
+-(void)newsButtonClick
+{
+    //系统消息
+    [self.navigationController pushViewController:_JpushNewsVC animated:YES];
+}
+
 
 #pragma mark 设置头部
 -(void)createTopView
@@ -325,12 +349,7 @@
 
 
 
-//信息按钮跳转
--(void)newsButtonClick
-{
-    //系统消息
-    [self.navigationController pushViewController:_JpushNewsVC animated:YES];
-}
+
 
 
 

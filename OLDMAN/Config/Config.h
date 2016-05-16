@@ -284,4 +284,11 @@ typedef void (^NetWorkBlock)(BOOL netConnetState);
 
 
 
+//查询未分发信息
+#define getNotDistributeForAppHttp  Http@"getNotDistributeForApp.do"
+
+//分发用户
+#define distributeByDocIdHttp  Http@"distributeByDocId.do"
+
+
 #endif
