@@ -251,11 +251,10 @@
     //申请人/代理人签字 签字框
     shenQingR_button=[ZCControl createButtonWithFrame:CGRectMake(5, CGRectGetMaxY(shenQingR_Label.frame)+10, WIDTH-10, (WIDTH-10)/5*3) Text:nil ImageName:nil bgImageName:nil Target:self Method:@selector(shenQingR_button_click)];
     [RootScrollView addSubview:shenQingR_button];
-    shenQingR_button.layer.masksToBounds=YES;
-    //[shenQingR_button setBackgroundColor:CREATECOLOR(101, 129, 90, 1)];
     [shenQingR_button setBackgroundColor:[UIColor whiteColor]];
+    shenQingR_button.layer.masksToBounds=YES;
     shenQingR_button.layer.cornerRadius=5.0;
-    shenQingR_button.layer.borderWidth=0.1;
+    shenQingR_button.layer.borderWidth=0.5;
     
     if (![PublicFunction isBlankString:_shenFenXXModel.qianMing]) {
         
@@ -409,15 +408,15 @@
         
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请填写“签名”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
-    } else if (WIDTH==320  && qianMing.length<4500) {
+    } else if (WIDTH==320  && qianMing.length<2200) {
         
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请正确填写“签名”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
-    } else if (WIDTH==375  && qianMing.length<5000) {
+    } else if (WIDTH==375  && qianMing.length<3000) {
         
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请正确填写“签名”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
-    } else if (WIDTH==414  && qianMing.length<6200) {
+    } else if (WIDTH==414  && qianMing.length<4000) {
         
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"请正确填写“签名”" message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];

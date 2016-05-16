@@ -313,14 +313,15 @@ void ProviderReleaseData (void *info, const void *data, size_t size)
             uint8_t* ptr = (uint8_t*)pCurPtr;
             ptr[0] = 0;
         }
-        else
-        {
-            // 改成下面的代码，会将图片转成想要的颜色
-            uint8_t* ptr = (uint8_t*)pCurPtr;
-            ptr[3] = 0; //0~255
-            ptr[2] = 0;
-            ptr[1] = 0;
-        }
+        //去掉边框
+//        else
+//        {
+//            // 改成下面的代码，会将图片转成想要的颜色
+//            uint8_t* ptr = (uint8_t*)pCurPtr;
+//            ptr[3] = 0; //0~255
+//            ptr[2] = 0;
+//            ptr[1] = 0;
+//        }
 
     }
 
