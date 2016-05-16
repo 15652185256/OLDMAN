@@ -15,10 +15,10 @@
 
 @implementation NetRequestClass
 #pragma 监测网络的可链接性
-//+ (BOOL) netWorkReachabilityWithURLString:(NSString *) strUrl
-//{
-//    __block BOOL netState = NO;
-//    
++ (BOOL) netWorkReachabilityWithURLString:(NSString *) strUrl
+{
+    __block BOOL netState = NO;
+    
 //    NSURL *baseURL = [NSURL URLWithString:strUrl];
 //    
 //    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
@@ -41,9 +41,9 @@
 //    }];
 //    
 //    [manager.reachabilityManager startMonitoring];
-//    
-//    return netState;
-//}
+    
+    return netState;
+}
 
 
 /***************************************

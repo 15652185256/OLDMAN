@@ -654,12 +654,12 @@
         xuanXiang_Button.tag=4000+i;
         
         if (![PublicFunction isBlankString:_geRenXXModel.zhongJiaoXY]) {
-            if ([_geRenXXModel.zhongJiaoXY intValue]==1) {
-                if (i==1) {
+            if ([[_geRenXXModel.zhongJiaoXY substringToIndex:1] isEqualToString:@"X"]) {
+                if (i==0) {
                     [xuanXiang_Button setChecked:YES];
                 }
             } else {
-                if (i==0) {
+                if (i==1) {
                     [xuanXiang_Button setChecked:YES];
                 }
             }
@@ -704,11 +704,11 @@
     
 
     if (![PublicFunction isBlankString:_geRenXXModel.zhongJiaoXY]) {
-        if ([_geRenXXModel.zhongJiaoXY intValue]==1) {
-            my_xinYangJP_Label.userInteractionEnabled=NO;
-        } else {
+        if ([[_geRenXXModel.zhongJiaoXY substringToIndex:1] isEqualToString:@"X"]) {
             my_xinYangJP_Label.userInteractionEnabled=YES;
             my_xinYangJP_Label.text = [_geRenXXModel.zhongJiaoXY substringFromIndex:1];
+        } else {
+            my_xinYangJP_Label.userInteractionEnabled=NO;
         }
     }
     
@@ -2390,7 +2390,7 @@
 #pragma mark - 宗教
     if (![PublicFunction isBlankString:my_zhongJiaoXY]) {
         if ([my_zhongJiaoXY intValue]==1) {
-            [parameter setObject:my_zhongJiaoXY forKey:@"zhongJiaoXY"];
+            [parameter setObject:@"0" forKey:@"zhongJiaoXY"];
         } else {
             [parameter setObject:[NSString stringWithFormat:@"X%@",my_xinYangJP_Label.text] forKey:@"zhongJiaoXY"];
         }
