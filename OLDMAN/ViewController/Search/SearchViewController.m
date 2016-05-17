@@ -23,6 +23,7 @@
     
     UILabel * prompt_Label;//提示
     
+    UILabel * warn_Label;//警报
 }
 @property(nonatomic,assign)int NewsListPage;
 //数据
@@ -86,7 +87,7 @@
     
     
     //头部搜索视图
-    UIView * TopView = [ZCControl createView:CGRectMake(0, 0, WIDTH, 230)];
+    UIView * TopView = [ZCControl createView:CGRectMake(0, 0, WIDTH, 260)];
     _tableView.tableHeaderView = TopView;
     
     //下划线
@@ -138,6 +139,13 @@
     
     
     
+    //提示
+    warn_Label=[ZCControl createLabelWithFrame:CGRectMake(15, CGRectGetMaxY(sendButton.frame), WIDTH-30, 50) Font:14 Text:nil];
+    warn_Label.textColor = [UIColor redColor];
+    [TopView addSubview:warn_Label];
+    
+    
+    
     //收起键盘
     UITapGestureRecognizer * tapRoot = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapRootAction)];
     //设置点击次数
@@ -154,7 +162,9 @@
     
     shenFenZH_Field.text = @"";
     
-    prompt_Label.text = @"请至少输入一项";
+    prompt_Label.text = @"＊请至少输入一项";
+    
+    warn_Label.text = @"";
     
     [_dataSourse removeAllObjects];
     
@@ -212,7 +222,10 @@
                     [model setValuesForKeysWithDictionary:dict];
                     [_dataSourse addObject:model];
                 }
+            } else {
+                warn_Label.text = @"查无此人，请核对信息是否正确！";
             }
+            
         } else {
             
             UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"错误代码%@",returnValue[@"code"]] message:nil delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
@@ -231,18 +244,27 @@
 
 
 
+
 #pragma mark 输入完毕
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    if ([xingMing_Field.text isEqualToString:@""] && [shenFenZH_Field.text isEqualToString:@""]) {
+        warn_Label.text = @"";
+    }
     //收起键盘
     [self tapRootAction];
     
     return YES;
 }
 
+
+
 //收起键盘
 -(void)tapRootAction
 {
+    if ([xingMing_Field.text isEqualToString:@""] && [shenFenZH_Field.text isEqualToString:@""]) {
+        warn_Label.text = @"";
+    }
     [_tableView endEditing:YES];
 }
 
